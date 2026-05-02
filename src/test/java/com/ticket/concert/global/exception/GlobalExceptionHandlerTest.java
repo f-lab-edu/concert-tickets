@@ -20,7 +20,7 @@ class GlobalExceptionHandlerTest {
 
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         Assertions.assertThat(response.getBody().isSuccess()).isFalse();
-        Assertions.assertThat(response.getBody().getError().getCode()).isEqualTo("INTERNAL_SERVER_ERROR");
+        Assertions.assertThat(response.getBody().getError().getCode()).isEqualTo("C003");
     }
 
 }

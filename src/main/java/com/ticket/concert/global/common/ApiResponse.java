@@ -21,8 +21,20 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, null, null);
     }
 
+    public static ApiResponse<Void> error(ErrorCode errorCode) {
+        return new ApiResponse<>(
+                false,
+                null,
+                new ErrorResponse(errorCode.getCode(), errorCode.getMessage())
+        );
+    }
+
     public static ApiResponse<Void> error(ErrorCode errorCode, String message) {
-        return new ApiResponse<>(false, null, new ErrorResponse(errorCode.name(), message));
+        return new ApiResponse<>(
+                false,
+                null,
+                new ErrorResponse(errorCode.getCode(), message)
+        );
     }
 
     @Getter
