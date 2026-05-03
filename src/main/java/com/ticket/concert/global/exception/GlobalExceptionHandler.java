@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
+
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -19,6 +22,22 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(errorCode.getStatus())
                 .body(ApiResponse.error(errorCode, e.getMessage()));
+    }
+
+    @ExceptionHandler({IOException.class, TimeoutException.class})
+    protected ResponseEntity<ApiResponse<Void>> handleCheckedException(Exception e) {
+        log.error("External resource error: ", e);
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(ApiResponse.error(ErrorCode.EXTERNAL_RESOURCE_ERROR, "일시적인 오류가 발생했습니다."));
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    protected ResponseEntity<ApiResponse<Void>> handleRuntimeException(RuntimeException e) {
+        log.error("Unhandled RuntimeException: ", e);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error(ErrorCode.INTERNAL_SERVER_ERROR, "알 수 없는 오류가 발생했습니다."));
     }
 
     @ExceptionHandler(Exception.class)
