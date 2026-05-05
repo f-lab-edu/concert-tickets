@@ -20,11 +20,8 @@ public class LoginUserFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         try {
             HttpSession session = request.getSession(false);
             if (session != null && session.getAttribute(SESSION_KEY) instanceof LoginUser u) {

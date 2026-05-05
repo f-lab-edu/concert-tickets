@@ -14,6 +14,10 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "C003", "서버 내부에 오류가 발생했습니다."),
     EXTERNAL_RESOURCE_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "C004", "일시적인 오류가 발생했습니다."),
 
+    // Auth
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "A001", "인증이 필요합니다."),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "A002", "접근 권한이 없습니다."),
+
     // User
     DUPLICATE_MEMBER(HttpStatus.BAD_REQUEST, "M001", "이미 가입된 회원입니다."),
     INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "M002", "비밀번호 규칙에 맞지 않습니다.");
