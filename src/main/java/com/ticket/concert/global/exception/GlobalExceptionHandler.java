@@ -40,12 +40,4 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ErrorCode.INTERNAL_SERVER_ERROR, "알 수 없는 오류가 발생했습니다."));
     }
 
-    @ExceptionHandler(Exception.class)
-    protected ResponseEntity<ApiResponse<Void>> handleException(Exception e) {
-        log.error("Unhandled Exception: ", e);
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error(ErrorCode.INTERNAL_SERVER_ERROR, "알 수 없는 오류가 발생했습니다."));
-    }
-
 }
