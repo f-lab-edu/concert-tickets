@@ -5,11 +5,13 @@ import com.ticket.concert.global.exception.constant.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -22,6 +24,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(errorCode.getStatus())
                 .body(ApiResponse.error(errorCode, e.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ApiResponse<Void>> handleValidExceptionException(MethodArgumentNotValidException e) {
+        log.warn("MethodArgumentNotValidException: {}", e.getMessage());
+        String message = e.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        ErrorCode errorCode = ErrorCode.INVALID_INPUT_VALUE;
+        return ResponseEntity
+                .status(errorCode.getStatus())
+                .body(ApiResponse.error(errorCode, message));
     }
 
     @ExceptionHandler({IOException.class, TimeoutException.class})
