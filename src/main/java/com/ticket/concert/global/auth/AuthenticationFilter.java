@@ -10,26 +10,22 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-public class LoginUserFilter extends OncePerRequestFilter {
+public class AuthenticationFilter extends OncePerRequestFilter {
 
     public static final String SESSION_KEY = "LOGIN_USER";
-    private static final ThreadLocal<LoginUser> CURRENT = new ThreadLocal<>();
-
-    public static LoginUser getCurrentUser() {
-        return CURRENT.get();
-    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         try {
             HttpSession session = request.getSession(false);
-            if (session != null && session.getAttribute(SESSION_KEY) instanceof LoginUser u) {
-                CURRENT.set(u);
+            if (session != null && session.getAttribute(SESSION_KEY) instanceof LoginUser user) {
+                UserContextHolder.set(user);
             }
             filterChain.doFilter(request, response);
         } finally {
-            CURRENT.remove();
+            UserContextHolder.remove();
         }
     }
 }
