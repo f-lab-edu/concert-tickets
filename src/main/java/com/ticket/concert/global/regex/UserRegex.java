@@ -1,6 +1,6 @@
 package com.ticket.concert.global.regex;
 
-public class Regex {
+public class UserRegex {
 
     public static final String USER_ID = "^[A-Za-z0-9]{8,20}$";
     // 8~20자, 숫자/영문/특수문자 중 2종류 이상 포함
