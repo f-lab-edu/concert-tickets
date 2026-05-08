@@ -23,6 +23,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             if (session != null && session.getAttribute(SESSION_KEY) instanceof LoginUser user) {
                 UserContextHolder.set(user);
             }
+
             filterChain.doFilter(request, response);
         } finally {
             UserContextHolder.remove();
