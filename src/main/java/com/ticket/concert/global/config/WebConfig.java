@@ -1,17 +1,14 @@
 package com.ticket.concert.global.config;
 
-import com.ticket.concert.global.auth.AuthorizationFilter;
-import com.ticket.concert.global.auth.AuthenticationFilter;
-import lombok.RequiredArgsConstructor;
+import com.ticket.concert.global.auth.filter.AuthorizationFilter;
+import com.ticket.concert.global.auth.filter.AuthenticationFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
-
 
     @Bean
     public FilterRegistrationBean<AuthenticationFilter> authenticationFilter() {

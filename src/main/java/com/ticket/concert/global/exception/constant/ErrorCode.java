@@ -20,7 +20,9 @@ public enum ErrorCode {
 
     // User
     DUPLICATE_MEMBER(HttpStatus.BAD_REQUEST, "M001", "이미 가입된 회원입니다."),
-    INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "M002", "비밀번호 규칙에 맞지 않습니다.");
+    INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "M002", "비밀번호 규칙에 맞지 않습니다."),
+    INVALID_CREDENTIALS(HttpStatus.BAD_REQUEST, "M003", "아이디 또는 비밀번호가 올바르지 않습니다.");
+
 
     private final HttpStatus status;
     private final String code;

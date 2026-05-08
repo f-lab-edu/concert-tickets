@@ -1,6 +1,7 @@
-package com.ticket.concert.global.auth;
+package com.ticket.concert.global.auth.filter;
 
 import com.ticket.concert.domain.LoginUser;
+import com.ticket.concert.global.auth.UserContextHolder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

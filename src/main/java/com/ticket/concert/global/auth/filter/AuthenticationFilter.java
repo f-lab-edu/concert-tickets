@@ -1,6 +1,7 @@
-package com.ticket.concert.global.auth;
+package com.ticket.concert.global.auth.filter;
 
 import com.ticket.concert.domain.LoginUser;
+import com.ticket.concert.global.auth.UserContextHolder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,9 +11,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-public class AuthenticationFilter extends OncePerRequestFilter {
+import static com.ticket.concert.global.auth.SessionConst.SESSION_KEY;
 
-    public static final String SESSION_KEY = "LOGIN_USER";
+public class AuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
