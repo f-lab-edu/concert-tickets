@@ -9,7 +9,8 @@ public record LoginUser(
         String username,
         List<Role> roles
 ) {
-    public LoginUser(User user) {
-        this(user.getId(), user.getName(), List.of(user.getRole()));
+
+    public static LoginUser from(User user){
+        return new LoginUser(user.getId(), user.getName(), List.of(user.getRole()));
     }
 }
