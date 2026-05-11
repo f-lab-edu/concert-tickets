@@ -1,6 +1,6 @@
 package com.ticket.concert.controller;
 
-import com.ticket.concert.dto.auth.reqeust.LoginRequest;
+import com.ticket.concert.dto.auth.request.LoginRequest;
 import com.ticket.concert.dto.auth.response.LoginResponse;
 import com.ticket.concert.global.common.ApiResponse;
 import com.ticket.concert.service.AuthService;
