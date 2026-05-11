@@ -28,7 +28,7 @@ public class AuthService {
         User user = findUserOrThrow(request);
         validatePassword(request, user);
         createLoginSession(httpRequest, user);
-        return new LoginResponse(user);
+        return LoginResponse.from(user);
     }
 
     private User findUserOrThrow(LoginRequest request) {
@@ -44,7 +44,7 @@ public class AuthService {
 
     private void createLoginSession(HttpServletRequest httpRequest, User user) {
         HttpSession session = httpRequest.getSession(true);
-        session.setAttribute(SESSION_KEY, new LoginUser(user));
+        session.setAttribute(SESSION_KEY, LoginUser.from(user));
     }
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public record LoginResponse(
         List<Role> roles
 ) {
-    public LoginResponse(User user) {
-        this(List.of(user.getRole()));
+    public static LoginResponse from(User user) {
+        return new LoginResponse(List.of(user.getRole()));
     }
 }
