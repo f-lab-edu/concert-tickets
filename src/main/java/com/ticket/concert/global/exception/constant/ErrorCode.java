@@ -21,7 +21,9 @@ public enum ErrorCode {
     // User
     DUPLICATE_MEMBER(HttpStatus.BAD_REQUEST, "M001", "이미 가입된 회원입니다."),
     INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "M002", "비밀번호 규칙에 맞지 않습니다."),
-    INVALID_CREDENTIALS(HttpStatus.BAD_REQUEST, "M003", "아이디 또는 비밀번호가 올바르지 않습니다.");
+    INVALID_CREDENTIALS(HttpStatus.BAD_REQUEST, "M003", "아이디 또는 비밀번호가 올바르지 않습니다."),
+    EMAIL_DUPLICATED(HttpStatus.BAD_REQUEST, "M004", "이미 사용중인 이메일입니다."),
+    PHONE_DUPLICATED(HttpStatus.BAD_REQUEST, "M005", "이미 사용중인 연락처입니다.");
 
 
     private final HttpStatus status;

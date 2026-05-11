@@ -15,7 +15,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
     private static final List<String> EXCLUDE_PATHS = List.of(
             "/v1/auth/login",
-            "/v1/auth/join",
+            "/v1/user/join",
             "/error"
     );
 

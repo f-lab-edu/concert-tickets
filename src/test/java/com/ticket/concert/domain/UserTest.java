@@ -8,8 +8,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserTest {
 
     @Test
-    void 정상_생성(){
-        User user = new User(1L, "aa@aa.aa", "asdf1234!@", "이찬한", "USER");
+    void 정상_생성() {
+        User user = new User(1L, "aa@aa.aa", "asdf1234!@", "이찬한", "010-0001-0001", "USER");
 
         assertThat(user.getId()).isEqualTo(1L);
         assertThat(user.getEmail()).isEqualTo("aa@aa.aa");
