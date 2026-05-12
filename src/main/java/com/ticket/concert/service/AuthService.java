@@ -2,7 +2,7 @@ package com.ticket.concert.service;
 
 import com.ticket.concert.domain.LoginUser;
 import com.ticket.concert.domain.User;
-import com.ticket.concert.dto.auth.reqeust.LoginRequest;
+import com.ticket.concert.dto.auth.request.LoginRequest;
 import com.ticket.concert.dto.auth.response.LoginResponse;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
