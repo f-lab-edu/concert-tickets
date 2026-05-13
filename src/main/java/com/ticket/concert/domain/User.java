@@ -1,10 +1,13 @@
 package com.ticket.concert.domain;
 
 import com.ticket.concert.domain.constant.Role;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class User extends BaseEntity {
     private Long id;
     private String email;
@@ -20,10 +23,6 @@ public class User extends BaseEntity {
         this.name = name;
         this.phone = phone;
         this.role = Role.valueOf(role);
-    }
-
-    public static User create(String email, String password, String name, String phone, PasswordEncoder passwordEncoder) {
-        return new User(null, email, passwordEncoder.encode(password), name, phone, Role.USER.name());
     }
 
 }

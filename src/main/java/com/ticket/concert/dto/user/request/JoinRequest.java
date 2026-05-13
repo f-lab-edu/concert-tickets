@@ -1,8 +1,10 @@
 package com.ticket.concert.dto.user.request;
 
+import com.ticket.concert.domain.User;
 import com.ticket.concert.global.regex.UserRegex;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public record JoinRequest(
         @NotBlank(message = "이메일은 필수입니다.")
@@ -21,4 +23,13 @@ public record JoinRequest(
         @Pattern(regexp = UserRegex.PHONE, message = "연락처 형식을 확인해주세요.")
         String phone
 ) {
+
+    public User toUser(PasswordEncoder passwordEncoder) {
+        return User.builder()
+                .email(this.email())
+                .password(passwordEncoder.encode(this.password))
+                .name(this.name())
+                .phone(this.phone())
+                .build();
+    }
 }
