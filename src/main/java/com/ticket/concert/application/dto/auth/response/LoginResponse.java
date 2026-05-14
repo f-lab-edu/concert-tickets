@@ -1,4 +1,4 @@
-package com.ticket.concert.presentation.dto.auth.response;
+package com.ticket.concert.application.dto.auth.response;
 
 import com.ticket.concert.domain.user.User;
 import com.ticket.concert.domain.constant.Role;

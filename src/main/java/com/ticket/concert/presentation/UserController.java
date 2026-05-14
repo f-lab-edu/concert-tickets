@@ -1,6 +1,6 @@
 package com.ticket.concert.presentation;
 
-import com.ticket.concert.presentation.dto.user.request.JoinRequest;
+import com.ticket.concert.application.dto.user.request.JoinRequest;
 import com.ticket.concert.global.common.ApiResponse;
 import com.ticket.concert.application.UserService;
 import jakarta.validation.Valid;

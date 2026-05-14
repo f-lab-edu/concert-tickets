@@ -1,7 +1,7 @@
 package com.ticket.concert.application;
 
 import com.ticket.concert.domain.user.User;
-import com.ticket.concert.presentation.dto.user.request.JoinRequest;
+import com.ticket.concert.application.dto.user.request.JoinRequest;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
 import com.ticket.concert.domain.user.UserRepository;

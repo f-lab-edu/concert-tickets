@@ -1,4 +1,4 @@
-package com.ticket.concert.presentation.dto.user.request;
+package com.ticket.concert.application.dto.user.request;
 
 import com.ticket.concert.domain.user.User;
 import com.ticket.concert.global.regex.UserRegex;

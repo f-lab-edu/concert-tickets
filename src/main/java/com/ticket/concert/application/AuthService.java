@@ -2,8 +2,8 @@ package com.ticket.concert.application;
 
 import com.ticket.concert.domain.LoginUser;
 import com.ticket.concert.domain.user.User;
-import com.ticket.concert.presentation.dto.auth.request.LoginRequest;
-import com.ticket.concert.presentation.dto.auth.response.LoginResponse;
+import com.ticket.concert.application.dto.auth.request.LoginRequest;
+import com.ticket.concert.application.dto.auth.response.LoginResponse;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
 import com.ticket.concert.domain.user.UserRepository;
