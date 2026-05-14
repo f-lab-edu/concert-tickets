@@ -1,6 +1,7 @@
 package com.ticket.concert.domain;
 
 import com.ticket.concert.domain.constant.Role;
+import com.ticket.concert.domain.user.User;
 
 import java.util.List;
 

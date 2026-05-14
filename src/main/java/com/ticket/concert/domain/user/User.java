@@ -1,5 +1,6 @@
-package com.ticket.concert.domain;
+package com.ticket.concert.domain.user;
 
+import com.ticket.concert.domain.BaseEntity;
 import com.ticket.concert.domain.constant.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

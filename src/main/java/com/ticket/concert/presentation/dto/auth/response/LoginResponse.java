@@ -1,6 +1,6 @@
-package com.ticket.concert.dto.auth.response;
+package com.ticket.concert.presentation.dto.auth.response;
 
-import com.ticket.concert.domain.User;
+import com.ticket.concert.domain.user.User;
 import com.ticket.concert.domain.constant.Role;
 
 import java.util.List;

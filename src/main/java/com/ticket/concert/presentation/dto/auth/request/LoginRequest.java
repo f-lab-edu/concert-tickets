@@ -1,4 +1,4 @@
-package com.ticket.concert.dto.auth.request;
+package com.ticket.concert.presentation.dto.auth.request;
 
 import com.ticket.concert.global.regex.UserRegex;
 import jakarta.validation.constraints.NotBlank;

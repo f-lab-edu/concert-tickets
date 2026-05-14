@@ -1,6 +1,4 @@
-package com.ticket.concert.repository.user;
-
-import com.ticket.concert.domain.User;
+package com.ticket.concert.domain.user;
 
 import java.util.Optional;
 
