@@ -1,7 +1,8 @@
-package com.ticket.concert.repository.user;
+package com.ticket.concert.infrastructure.persistence.user;
 
-import com.ticket.concert.domain.User;
+import com.ticket.concert.domain.user.User;
 import com.ticket.concert.domain.constant.Status;
+import com.ticket.concert.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.RowMapper;

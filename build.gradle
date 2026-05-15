@@ -37,6 +37,9 @@ dependencies {
 
     // BCrypt
     implementation 'org.springframework.security:spring-security-crypto'
+
+    // ArcUnit
+    testImplementation 'com.tngtech.archunit:archunit-junit5:1.4.2'
 }
 
 tasks.named('test') {

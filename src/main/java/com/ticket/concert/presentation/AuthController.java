@@ -1,9 +1,9 @@
-package com.ticket.concert.controller;
+package com.ticket.concert.presentation;
 
-import com.ticket.concert.dto.auth.request.LoginRequest;
-import com.ticket.concert.dto.auth.response.LoginResponse;
+import com.ticket.concert.application.dto.auth.request.LoginRequest;
+import com.ticket.concert.application.dto.auth.response.LoginResponse;
 import com.ticket.concert.global.common.ApiResponse;
-import com.ticket.concert.service.AuthService;
+import com.ticket.concert.application.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
