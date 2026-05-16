@@ -1,8 +1,8 @@
 package com.ticket.concert.presentation;
 
-import com.ticket.concert.application.dto.user.request.JoinRequest;
+import com.ticket.concert.application.dto.mail.request.MailSendRequest;
+import com.ticket.concert.application.email.EmailService;
 import com.ticket.concert.global.common.ApiResponse;
-import com.ticket.concert.application.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class UserController {
+public class EmailController {
 
-    private final UserService userService;
+    private final EmailService emailService;
 
-    @PostMapping(value = "/v1/user/join")
-    public ApiResponse<Void> join(@Valid @RequestBody JoinRequest request) {
-        userService.join(request);
+    @PostMapping(value = "/v1/email/send")
+    public ApiResponse<Void> sendEmail(@Valid @RequestBody MailSendRequest request) {
+        emailService.sendEmail(request);
         return ApiResponse.success();
     }
 }

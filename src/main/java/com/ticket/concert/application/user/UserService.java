@@ -1,4 +1,4 @@
-package com.ticket.concert.application;
+package com.ticket.concert.application.user;
 
 import com.ticket.concert.domain.user.User;
 import com.ticket.concert.application.dto.user.request.JoinRequest;

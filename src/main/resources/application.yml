@@ -7,3 +7,17 @@ spring:
     username: root
     password: password
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ohohuniverse12@gmail.com
+    password: password
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+app:
+  base-url: http://localhost:10101
+
+mail:
+  from: ohuniverse@gmail.com
