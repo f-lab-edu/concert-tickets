@@ -1,13 +1,20 @@
 package com.ticket.concert.application.email;
 
 import com.ticket.concert.application.dto.mail.request.MailSendRequest;
+import com.ticket.concert.domain.constant.Status;
 import com.ticket.concert.domain.email.EmailSender;
+import com.ticket.concert.domain.email.EmailVerifyToken;
+import com.ticket.concert.domain.email.EmailVerifyTokenRepository;
+import com.ticket.concert.global.exception.BusinessException;
+import com.ticket.concert.global.exception.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -16,17 +23,17 @@ import java.util.UUID;
 public class EmailService {
 
     private static final Duration TOKEN_TTL = Duration.ofMinutes(30);
-    // 토큰 저장소
 
     @Value("${app.base-url}")
     private String baseUrl;
 
     private final EmailSender emailSender;
+    private final EmailVerifyTokenRepository emailVerifyTokenRepository;
 
+    @Transactional
     public void sendEmail(MailSendRequest request) {
         String token = generateUUID();
-        // 토큰 저장소에 저장
-        // tokenRepository.save(token, email, TOKEN_TTL);
+        saveEmailVerifyToken(request.email(), token);
 
         String verifyUrl = generateVerifyUrl(token);
         String htmlBody = buildHtml(verifyUrl);
@@ -35,6 +42,12 @@ public class EmailService {
 
     private String generateUUID() {
         return UUID.randomUUID().toString();
+    }
+
+    private void saveEmailVerifyToken(String email, String token) {
+        LocalDateTime expiresAt = LocalDateTime.now().plus(TOKEN_TTL);
+        Long generatedId = emailVerifyTokenRepository.save(token, email, expiresAt);
+        log.info("[EMAIL_VERIFY_TOKEN] save success. tokenId={}", generatedId);
     }
 
     private String generateVerifyUrl(String token) {
@@ -58,6 +71,29 @@ public class EmailService {
                   </p>
                 </div>
                 """.formatted(verifyUrl, verifyUrl);
+    }
+
+    @Transactional
+    public void verifyToken(String token) {
+        EmailVerifyToken emailVerifyToken = findByEmailVerifyTokenOrThrow(token);
+        validateConsumable(emailVerifyToken);
+        updateConsume(emailVerifyToken);
+    }
+
+    private EmailVerifyToken findByEmailVerifyTokenOrThrow(String token) {
+        return emailVerifyTokenRepository.findByTokenAndStatus(token, Status.ACTIVE)
+                .orElseThrow(() -> new BusinessException(ErrorCode.EMAIL_TOKEN_NOT_FOUND));
+    }
+
+    private void validateConsumable(EmailVerifyToken emailVerifyToken) {
+        if (!emailVerifyToken.isConsumable()) {
+            throw new BusinessException(ErrorCode.EMAIL_TOKEN_NOT_USABLE);
+        }
+    }
+
+    private void updateConsume(EmailVerifyToken emailVerifyToken) {
+        emailVerifyTokenRepository.updateConsumeAt(emailVerifyToken.getToken(), Status.ACTIVE);
+        log.info("[EMAIL_VERIFY_TOKEN] consume update success. tokenId={}", emailVerifyToken.getId());
     }
 
 }
