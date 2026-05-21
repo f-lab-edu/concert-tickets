@@ -40,17 +40,15 @@ public class SmtpEmailSender implements EmailSender {
             generateHelper(to, content, htmlBody, message);
             javaMailSender.send(message);
             log.info("[EMAIL SEND] success.");
-
         } catch (MailAuthenticationException e) {
             log.error("[EMAIL SEND] SMTP 인증 실패, SMTP 설정 확인 필요. ");
-            throw new BusinessException(ErrorCode.MAIL_SERVER_ERROR);
+            throw new BusinessException(ErrorCode.MAIL_SERVER_ERROR, e);
         } catch (MailSendException e) {
             handleMailSendException(e, to);
         } catch (MailException e) {
-            log.error("[EMAIL SEND] 메일 처리 실패. to={}", to);
+            log.error("[EMAIL SEND] 메일 처리 실패. to={}", to, e);
             throw new BusinessException(ErrorCode.MAIL_SEND_FAILED, e);
         }
-
     }
 
     private void generateHelper(String to, String content, String htmlBody, MimeMessage message) {
@@ -61,10 +59,10 @@ public class SmtpEmailSender implements EmailSender {
             helper.setSubject(content);
             helper.setText(htmlBody, true);
         } catch (AddressException e) {
-            log.warn("INVALID EMAIL. to={}", to);
+            log.warn("INVALID EMAIL. to={}", to, e);
             throw new BusinessException(ErrorCode.INVALID_EMAIL);
         } catch (MessagingException e) {
-            log.error("MAIL SEND FAILED. to={}", to);
+            log.error("MAIL SEND FAILED. to={}", to, e);
             throw new BusinessException(ErrorCode.MAIL_SEND_FAILED);
         }
     }

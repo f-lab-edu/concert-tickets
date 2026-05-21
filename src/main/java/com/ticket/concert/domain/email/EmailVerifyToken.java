@@ -3,13 +3,11 @@ package com.ticket.concert.domain.email;
 import com.ticket.concert.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class EmailVerifyToken extends BaseEntity {
 
     private Long id;

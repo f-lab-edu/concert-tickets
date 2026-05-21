@@ -66,15 +66,15 @@ public class JdbcEmailVerifyTokenRepository implements EmailVerifyTokenRepositor
     }
 
     @Override
-    public void updateConsumeAt(String token, Status status) {
+    public void updateConsumeAt(Long id, Status status) {
         String sql = """
                 UPDATE email_verify_token
                 SET consume_at = NOW()
-                WHERE token = :token AND status = :status
+                WHERE id = :id AND status = :status
                 """;
 
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("token", token)
+                .addValue("id", id)
                 .addValue("status", status.name());
 
         jdbcTemplate.update(sql, params);

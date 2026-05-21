@@ -32,7 +32,8 @@ public enum ErrorCode {
     MAIL_SERVER_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "E004", "메일 서비스가 일시적으로 불가합니다"),
     MAIL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E005", "메일 발송 중 오류가 발생했습니다"),
     EMAIL_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "E006", "잘못된 이메일 토큰입니다."),
-    EMAIL_TOKEN_NOT_USABLE(HttpStatus.BAD_REQUEST, "E007", "사용할 수 없는 이메일 토큰입니다.");
+    EMAIL_TOKEN_NOT_USABLE(HttpStatus.BAD_REQUEST, "E007", "사용할 수 없는 이메일 토큰입니다."),
+    MAIL_TEMPLATE_LOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "E008", "메일 템플릿을 불러오지 못했습니다.");
 
 
     private final HttpStatus status;

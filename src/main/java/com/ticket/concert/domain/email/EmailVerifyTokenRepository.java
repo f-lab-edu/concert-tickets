@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface EmailVerifyTokenRepository {
     Long save(String token,  String email, LocalDateTime tokenTtl);
     Optional<EmailVerifyToken> findByTokenAndStatus(String token, Status status);
-    void updateConsumeAt(String token, Status status);
+    void updateConsumeAt(Long id, Status status);
 
 }
