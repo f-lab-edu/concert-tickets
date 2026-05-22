@@ -2,6 +2,7 @@ package com.ticket.concert.infrastructure.mail;
 
 import com.ticket.concert.domain.email.EmailSender;
 import com.ticket.concert.global.exception.BusinessException;
+import com.ticket.concert.global.exception.RetryEmailException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
 import jakarta.mail.Address;
 import jakarta.mail.MessagingException;
@@ -18,6 +19,9 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import java.net.ConnectException;
@@ -33,6 +37,11 @@ public class SmtpEmailSender implements EmailSender {
     @Value("${mail.from}")
     private String from;
 
+    @Retryable(
+            retryFor = RetryEmailException.class,
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 1000, multiplier = 2, maxDelay = 10000)
+    )
     @Override
     public void send(String to, String content, String htmlBody) {
         try {
@@ -60,10 +69,10 @@ public class SmtpEmailSender implements EmailSender {
             helper.setText(htmlBody, true);
         } catch (AddressException e) {
             log.warn("INVALID EMAIL. to={}", to, e);
-            throw new BusinessException(ErrorCode.INVALID_EMAIL);
+            throw new BusinessException(ErrorCode.INVALID_EMAIL, e);
         } catch (MessagingException e) {
             log.error("MAIL SEND FAILED. to={}", to, e);
-            throw new BusinessException(ErrorCode.MAIL_SEND_FAILED);
+            throw new BusinessException(ErrorCode.MAIL_SEND_FAILED, e);
         }
     }
 
@@ -86,7 +95,7 @@ public class SmtpEmailSender implements EmailSender {
                 throw new BusinessException(ErrorCode.MAIL_SERVER_ERROR, e);
             }
             if (returnCode >= 400 && returnCode < 500) { // 일시 실패
-                throw new BusinessException(ErrorCode.MAIL_SERVER_UNAVAILABLE, e);
+                throw new RetryEmailException(e);
             }
 
             throw new BusinessException(ErrorCode.MAIL_SEND_FAILED, e);
@@ -94,11 +103,23 @@ public class SmtpEmailSender implements EmailSender {
 
         if (cause instanceof SendFailedException sendEx) {
             Address[] invalid = sendEx.getInvalidAddresses();
+            Address[] validUnsent = sendEx.getValidUnsentAddresses();
+
             log.warn("[EMAIL SEND] 일부 수신자 거부. invalid={}", Arrays.toString(invalid));
+
+            if (validUnsent != null && validUnsent.length > 0) {
+                throw new RetryEmailException(e);
+            }
             throw new BusinessException(ErrorCode.INVALID_RECIPIENT, e);
         }
 
         log.error("[EMAIL SEND] 메일 전송 실패. to={}", to, e);
         throw new BusinessException(ErrorCode.MAIL_SEND_FAILED, e);
+    }
+
+    @Recover
+    public void recover(RetryEmailException e, String to, String content, String htmlBody) {
+        log.error("[EMAIL SEND] 재시도 모두 실패. to={}", to, e);
+        throw new BusinessException(ErrorCode.MAIL_SERVER_UNAVAILABLE, e);
     }
 }
