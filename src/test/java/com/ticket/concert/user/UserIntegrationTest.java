@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.*;
 public class UserIntegrationTest extends IntegrationTest {
 
     private static final String JOIN_URL = "/v1/user/join";
-    private final String PASSWORD = "asdf1234!@";
+    private static final String PASSWORD = "asdf1234!@";
 
     @Autowired
     private UserRepository userRepository;
@@ -53,7 +53,7 @@ public class UserIntegrationTest extends IntegrationTest {
         assertThat(savedUser.getPassword()).isNotEqualTo(joinRequest.password());
     }
 
-    private JoinRequest generateJoinRequest(String email, String password, String name, String phone){
+    private JoinRequest generateJoinRequest(String email, String password, String name, String phone) {
         return new JoinRequest(email, password, name, phone);
     }
 
