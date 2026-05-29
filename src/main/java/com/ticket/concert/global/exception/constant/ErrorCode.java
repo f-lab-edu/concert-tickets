@@ -23,7 +23,17 @@ public enum ErrorCode {
     INVALID_PASSWORD_FORMAT(HttpStatus.BAD_REQUEST, "M002", "비밀번호 규칙에 맞지 않습니다."),
     INVALID_CREDENTIALS(HttpStatus.BAD_REQUEST, "M003", "아이디 또는 비밀번호가 올바르지 않습니다."),
     EMAIL_DUPLICATED(HttpStatus.BAD_REQUEST, "M004", "이미 사용중인 이메일입니다."),
-    PHONE_DUPLICATED(HttpStatus.BAD_REQUEST, "M005", "이미 사용중인 연락처입니다.");
+    PHONE_DUPLICATED(HttpStatus.BAD_REQUEST, "M005", "이미 사용중인 연락처입니다."),
+
+    // Email
+    INVALID_EMAIL(HttpStatus.BAD_REQUEST, "E001", "잘못된 이메일 주소입니다."),
+    MAIL_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "E002", "메일 발송에 실패했습니다."),
+    INVALID_RECIPIENT(HttpStatus.BAD_REQUEST, "E003", "존재하지 않는 메일 주소입니다"),
+    MAIL_SERVER_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE, "E004", "메일 서비스가 일시적으로 불가합니다"),
+    MAIL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "E005", "메일 발송 중 오류가 발생했습니다"),
+    EMAIL_TOKEN_NOT_FOUND(HttpStatus.BAD_REQUEST, "E006", "잘못된 이메일 토큰입니다."),
+    EMAIL_TOKEN_NOT_USABLE(HttpStatus.BAD_REQUEST, "E007", "사용할 수 없는 이메일 토큰입니다."),
+    MAIL_TEMPLATE_LOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "E008", "메일 템플릿을 불러오지 못했습니다.");
 
 
     private final HttpStatus status;

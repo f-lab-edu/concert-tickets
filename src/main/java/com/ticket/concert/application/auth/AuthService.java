@@ -1,4 +1,4 @@
-package com.ticket.concert.application;
+package com.ticket.concert.application.auth;
 
 import com.ticket.concert.domain.LoginUser;
 import com.ticket.concert.domain.user.User;
