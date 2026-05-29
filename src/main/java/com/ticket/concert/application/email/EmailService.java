@@ -31,7 +31,6 @@ public class EmailService {
     private final EmailVerifyTokenRepository emailVerifyTokenRepository;
     private final EmailTemplateRenderer emailTemplateRenderer;
 
-    @Transactional
     public void sendEmail(MailSendRequest request) {
         String token = generateUUID();
         saveEmailVerifyToken(request.email(), token);
