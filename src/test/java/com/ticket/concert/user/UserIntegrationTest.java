@@ -54,6 +54,53 @@ public class UserIntegrationTest extends IntegrationTest {
         assertThat(savedUser.getPassword()).isNotEqualTo(joinRequest.password());
     }
 
+    @Test
+    @DisplayName("이메일 형식이 올바르지 않으면 400을 반환하고 회원은 저장되지 않는다.")
+    void join_invalidEmail_returnsBadRequest() {
+        JoinRequest request = generateJoinRequest("not-an-email", PASSWORD, "이찬한", "01000001234");
+
+        ExtractableResponse<Response> response =
+                RestAssured.given().log().ifValidationFails()
+                        .contentType(ContentType.JSON)
+                        .body(request)
+                        .when()
+                        .post(JOIN_URL)
+                        .then().log().ifValidationFails()
+                        .extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
+        assertThat(userRepository.findByEmail(request.email())).isEmpty();
+    }
+
+    @Test
+    @DisplayName("이미 가입된 이메일로 가입하면 실패하고 기존 회원 정보는 유지된다.")
+    void join_duplicateEmail_fails() {
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(joinRequest)
+                .when()
+                .post(JOIN_URL)
+                .then().extract();
+
+        JoinRequest duplicate = generateJoinRequest(joinRequest.email(), PASSWORD, "다른이름", "01099998888");
+
+        ExtractableResponse<Response> response =
+                RestAssured.given().log().ifValidationFails()
+                        .contentType(ContentType.JSON)
+                        .body(duplicate)
+                        .when()
+                        .post(JOIN_URL)
+                        .then().log().ifValidationFails()
+                        .extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
+
+        User savedUser = userRepository.findByEmail(joinRequest.email())
+                .orElseThrow(() -> new AssertionError("가입한 회원을 찾을 수 없습니다."));
+        assertThat(savedUser.getName()).isEqualTo(joinRequest.name());
+    }
+
+
     private JoinRequest generateJoinRequest(String email, String password, String name, String phone) {
         return new JoinRequest(email, password, name, phone);
     }

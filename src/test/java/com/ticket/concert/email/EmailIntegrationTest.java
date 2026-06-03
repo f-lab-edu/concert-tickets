@@ -21,8 +21,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @DisplayName("이메일 통합테스트")
 public class EmailIntegrationTest extends IntegrationTest {
@@ -62,6 +61,24 @@ public class EmailIntegrationTest extends IntegrationTest {
     }
 
     @Test
+    @DisplayName("이메일 형식이 올바르지 않으면 400을 반환하고 메일은 발송되지 않는다.")
+    void send_invalidEmail_returnsBadRequest() {
+        MailSendRequest request = new MailSendRequest("not-an-email");
+
+        ExtractableResponse<Response> response =
+                RestAssured.given().log().ifValidationFails()
+                        .contentType(ContentType.JSON)
+                        .body(request)
+                        .when()
+                        .post(EMAIL_SEND_URL)
+                        .then().log().ifValidationFails()
+                        .extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
+        verify(emailSender, never()).send(anyString(), anyString(), anyString());
+    }
+
+    @Test
     @DisplayName("유효한 토큰으로 이메일 인증에 성공한다.")
     void verify_success() {
         String token = UUID.randomUUID().toString();
@@ -77,4 +94,18 @@ public class EmailIntegrationTest extends IntegrationTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
     }
+
+    @Test
+    @DisplayName("token 파라미터가 없으면 400을 반환한다.")
+    void verify_missingToken_returnsBadRequest() {
+        ExtractableResponse<Response> response =
+                RestAssured.given().log().ifValidationFails()
+                        .when()
+                        .get(EMAIL_VERIFY_URL)
+                        .then().log().ifValidationFails()
+                        .extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
+    }
+
 }
