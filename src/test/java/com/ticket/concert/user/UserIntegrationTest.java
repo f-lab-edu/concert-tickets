@@ -47,9 +47,10 @@ public class UserIntegrationTest extends IntegrationTest {
                 .orElseThrow(() -> new AssertionError("가입한 회원을 찾을 수 없습니다."));
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
-        assertThat(savedUser.getEmail()).isEqualTo(joinRequest.email());
-        assertThat(savedUser.getName()).isEqualTo(joinRequest.name());
-        assertThat(savedUser.getPhone()).isEqualTo(joinRequest.phone());
+        assertThat(savedUser).usingRecursiveComparison()
+                .comparingOnlyFields("email", "name", "phone")
+                .isEqualTo(joinRequest);
+
         assertThat(savedUser.getPassword()).isNotEqualTo(joinRequest.password());
     }
 
