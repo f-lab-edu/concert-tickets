@@ -1,8 +1,7 @@
 package com.ticket.concert.infrastructure.persistence.user;
 
-import com.ticket.concert.domain.user.User;
-import com.ticket.concert.domain.constant.Status;
-import com.ticket.concert.domain.user.UserRepository;
+import com.ticket.concert.domain.user.entity.User;
+import com.ticket.concert.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.RowMapper;
@@ -33,11 +32,15 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        String sql = "SELECT id, email, password, name, phone, role FROM users WHERE email = :email AND status = :status";
+        String sql = """
+                SELECT id, email, password, name, phone, role
+                FROM users 
+                WHERE email = :email AND deleted = :deleted
+                """;
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("email", email)
-                .addValue("status", Status.ACTIVE.name());
+                .addValue("deleted", false);
 
         List<User> users = jdbcTemplate.query(sql, params, USER_ROW_MAPPER);
         return Optional.ofNullable(DataAccessUtils.singleResult(users));
@@ -45,22 +48,22 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public boolean existsByEmail(String email) {
-        String sql = "SELECT EXISTS(SELECT 1 FROM users WHERE email = :email AND status = :status)";
+        String sql = "SELECT EXISTS(SELECT 1 FROM users WHERE email = :email AND deleted = :deleted)";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("email", email)
-                .addValue("status", Status.ACTIVE.name());
+                .addValue("deleted", false);
 
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, params, Boolean.class));
     }
 
     @Override
     public boolean existsByPhone(String phone) {
-        String sql = "SELECT EXISTS(SELECT 1 FROM users WHERE phone = :phone AND status = :status)";
+        String sql = "SELECT EXISTS(SELECT 1 FROM users WHERE phone = :phone AND deleted = :deleted)";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("phone", phone)
-                .addValue("status", Status.ACTIVE.name());
+                .addValue("deleted", false);
 
         return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, params, Boolean.class));
     }
