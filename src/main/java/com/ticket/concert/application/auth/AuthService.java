@@ -1,12 +1,12 @@
 package com.ticket.concert.application.auth;
 
 import com.ticket.concert.domain.LoginUser;
-import com.ticket.concert.domain.user.User;
+import com.ticket.concert.domain.user.entity.User;
 import com.ticket.concert.application.dto.auth.request.LoginRequest;
 import com.ticket.concert.application.dto.auth.response.LoginResponse;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
-import com.ticket.concert.domain.user.UserRepository;
+import com.ticket.concert.domain.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

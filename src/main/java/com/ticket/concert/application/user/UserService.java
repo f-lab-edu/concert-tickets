@@ -1,10 +1,10 @@
 package com.ticket.concert.application.user;
 
-import com.ticket.concert.domain.user.User;
+import com.ticket.concert.domain.user.entity.User;
 import com.ticket.concert.application.dto.user.request.JoinRequest;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
-import com.ticket.concert.domain.user.UserRepository;
+import com.ticket.concert.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

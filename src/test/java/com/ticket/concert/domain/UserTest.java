@@ -1,7 +1,7 @@
 package com.ticket.concert.domain;
 
-import com.ticket.concert.domain.constant.Role;
-import com.ticket.concert.domain.user.User;
+import com.ticket.concert.domain.user.constant.Role;
+import com.ticket.concert.domain.user.entity.User;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

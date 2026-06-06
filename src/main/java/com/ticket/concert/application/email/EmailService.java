@@ -1,10 +1,9 @@
 package com.ticket.concert.application.email;
 
 import com.ticket.concert.application.dto.mail.request.MailSendRequest;
-import com.ticket.concert.domain.constant.Status;
-import com.ticket.concert.domain.email.EmailSender;
-import com.ticket.concert.domain.email.EmailVerifyToken;
-import com.ticket.concert.domain.email.EmailVerifyTokenRepository;
+import com.ticket.concert.domain.email.repository.EmailSender;
+import com.ticket.concert.domain.email.entity.EmailVerifyToken;
+import com.ticket.concert.domain.email.repository.EmailVerifyTokenRepository;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +61,7 @@ public class EmailService {
     }
 
     private EmailVerifyToken findByEmailVerifyTokenOrThrow(String token) {
-        return emailVerifyTokenRepository.findByTokenAndStatus(token, Status.ACTIVE)
+        return emailVerifyTokenRepository.findByTokenAndStatus(token)
                 .orElseThrow(() -> new BusinessException(ErrorCode.EMAIL_TOKEN_NOT_FOUND));
     }
 
@@ -73,7 +72,7 @@ public class EmailService {
     }
 
     private void updateConsume(EmailVerifyToken emailVerifyToken) {
-        emailVerifyTokenRepository.updateConsumeAt(emailVerifyToken.getId(), Status.ACTIVE);
+        emailVerifyTokenRepository.updateConsumeAt(emailVerifyToken.getId());
         log.info("[EMAIL_VERIFY_TOKEN] consume update success. tokenId={}", emailVerifyToken.getId());
     }
 

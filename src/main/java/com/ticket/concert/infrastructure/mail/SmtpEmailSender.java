@@ -1,6 +1,6 @@
 package com.ticket.concert.infrastructure.mail;
 
-import com.ticket.concert.domain.email.EmailSender;
+import com.ticket.concert.domain.email.repository.EmailSender;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.RetryEmailException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
