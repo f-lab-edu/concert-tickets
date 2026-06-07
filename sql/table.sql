@@ -1,3 +1,12 @@
+DROP TABLE IF EXISTS `booking`;
+DROP TABLE IF EXISTS `seat_inventory`;
+DROP TABLE IF EXISTS `seat`;
+DROP TABLE IF EXISTS `performance`;
+DROP TABLE IF EXISTS `product`;
+DROP TABLE IF EXISTS `category`;
+DROP TABLE IF EXISTS `email_verify_token`;
+DROP TABLE IF EXISTS `users`;
+
 CREATE TABLE `users`
 (
     `id`         BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '고유번호',
@@ -21,6 +30,15 @@ CREATE TABLE `email_verify_token`
     `created_at` DATETIME                          NULL     DEFAULT CURRENT_TIMESTAMP COMMENT '생성일'
 ) comment '이메일 인증 토큰';
 
+CREATE TABLE `category`
+(
+    `id`         BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '고유번호',
+    `name`       VARCHAR(100)                      NOT NULL COMMENT '분류',
+    `created_at` DATETIME                          NOT NULL DEFAULT NOW() COMMENT '생성일',
+    `updated_at` DATETIME                          NULL COMMENT '수정일',
+    `deleted`    TINYINT(1)                        NOT NULL DEFAULT 0 COMMENT '삭제 여부'
+) comment '카테고리';
+
 CREATE TABLE `product`
 (
     `id`               BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '고유번호',
@@ -35,15 +53,6 @@ CREATE TABLE `product`
     `updated_at`       DATETIME                          NULL COMMENT '수정일',
     `deleted`          TINYINT(1)                        NOT NULL DEFAULT 0 COMMENT '삭제 여부'
 ) comment '상품';
-
-CREATE TABLE `category`
-(
-    `id`         BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '고유번호',
-    `name`       VARCHAR(100)                      NOT NULL COMMENT '분류',
-    `created_at` DATETIME                          NOT NULL DEFAULT NOW() COMMENT '생성일',
-    `updated_at` DATETIME                          NULL COMMENT '수정일',
-    `deleted`    TINYINT(1)                        NOT NULL DEFAULT 0 COMMENT '삭제 여부'
-) comment '카테고리';
 
 CREATE TABLE `performance`
 (
