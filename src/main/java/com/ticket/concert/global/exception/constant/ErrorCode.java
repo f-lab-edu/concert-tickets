@@ -36,7 +36,8 @@ public enum ErrorCode {
     MAIL_TEMPLATE_LOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "E008", "메일 템플릿을 불러오지 못했습니다."),
 
     // Category
-    DUPLICATE_CATEGORY(HttpStatus.BAD_REQUEST, "C001", "이미 존재하는 카테고리 입니다.");
+    DUPLICATE_CATEGORY(HttpStatus.BAD_REQUEST, "CT001", "이미 존재하는 카테고리 입니다."),
+    NOTFOUND_CATEGORY(HttpStatus.BAD_REQUEST, "CT002", "찾을 수 없는 카테고리 입니다.");
 
 
     private final HttpStatus status;

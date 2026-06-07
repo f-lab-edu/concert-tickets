@@ -17,12 +17,21 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public void createCategory(CreateCategoryRequest request) {
-        if (categoryRepository.existsByName(request.name())) {
-            throw new BusinessException(ErrorCode.DUPLICATE_CATEGORY);
-        }
+        validateDuplicateName(request);
 
         Category category = request.toCategory();
         Category saveCategory = categoryRepository.save(category);
         log.info("[CATEGORY_SAVE] success. categoryId={}", saveCategory.getId());
+    }
+
+    private void validateDuplicateName(CreateCategoryRequest request) {
+        if (categoryRepository.existsByName(request.name())) {
+            throw new BusinessException(ErrorCode.DUPLICATE_CATEGORY);
+        }
+    }
+
+    public Category getCategory(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOTFOUND_CATEGORY));
     }
 }
