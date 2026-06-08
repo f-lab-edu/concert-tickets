@@ -20,19 +20,19 @@ public record CreateProductRequest(
         @NotNull(message = "종료일은 필수입니다.")
         LocalDate endDate,
         @NotNull(message = "예매 시작일은 필수입니다.")
-        LocalDateTime bookingStartAt,
+        LocalDateTime bookingOpenAt,
         @NotNull(message = "예매 종료일은 필수입니다.")
-        LocalDateTime bookingEndAt
+        LocalDateTime bookingCloseAt
 ) {
         public Product toProduct(Category category) {
                 return Product.builder()
                         .category(category)
                         .title(this.title())
                         .runningTime(this.runningTime())
-                        .startDate(this.endDate())
+                        .startDate(this.startDate())
                         .endDate(this.endDate())
-                        .bookingOpenAt(this.bookingStartAt())
-                        .bookingCloseAt(this.bookingEndAt())
+                        .bookingOpenAt(this.bookingOpenAt())
+                        .bookingCloseAt(this.bookingCloseAt())
                         .build();
         }
 }

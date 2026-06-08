@@ -2,6 +2,7 @@ package com.ticket.concert.presentation;
 
 import com.ticket.concert.application.dto.product.request.CreateProductRequest;
 import com.ticket.concert.application.product.ProductService;
+import com.ticket.concert.domain.product.entity.Product;
 import com.ticket.concert.global.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,8 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping(value = "/v1/product")
-    public ApiResponse<Void> createProduct(@Valid @RequestBody CreateProductRequest request) {
-        productService.createProduct(request);
-        return ApiResponse.success();
+    public ApiResponse<Long> createProduct(@Valid @RequestBody CreateProductRequest request) {
+        Product product = productService.createProduct(request);
+        return ApiResponse.success(product.getId());
     }
 }

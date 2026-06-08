@@ -17,11 +17,18 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
 
-    public void createProduct(CreateProductRequest request) {
+    public Product createProduct(CreateProductRequest request) {
+        validate();
+
         Category category = categoryService.getCategory(request.categoryId());
         Product product = request.toProduct(category);
         Product saveProduct = productRepository.save(product);
 
         log.info("[PRODUCT_SAVE] success. productId={}", saveProduct.getId());
+        return saveProduct;
+    }
+
+    private void validate() {
+        // 시작일, 종료일, 예매 시작일, 예매 종료일이 현제 날짜보다 앞에 존재할 경우
     }
 }
