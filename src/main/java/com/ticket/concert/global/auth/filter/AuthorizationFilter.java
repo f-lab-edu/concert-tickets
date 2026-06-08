@@ -18,6 +18,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             "/v1/user/join",
             "/v1/email/send",
             "/v1/email/verify",
+            "/v1/products/upcoming",
             "/error"
     );
 
