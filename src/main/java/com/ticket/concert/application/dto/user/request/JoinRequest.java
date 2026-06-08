@@ -1,6 +1,6 @@
 package com.ticket.concert.application.dto.user.request;
 
-import com.ticket.concert.domain.user.User;
+import com.ticket.concert.domain.user.entity.User;
 import com.ticket.concert.global.regex.UserRegex;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

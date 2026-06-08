@@ -1,8 +1,7 @@
 package com.ticket.concert.infrastructure.persistence.email;
 
-import com.ticket.concert.domain.constant.Status;
-import com.ticket.concert.domain.email.EmailVerifyToken;
-import com.ticket.concert.domain.email.EmailVerifyTokenRepository;
+import com.ticket.concert.domain.email.entity.EmailVerifyToken;
+import com.ticket.concert.domain.email.repository.EmailVerifyTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.RowMapper;
@@ -50,32 +49,30 @@ public class JdbcEmailVerifyTokenRepository implements EmailVerifyTokenRepositor
     }
 
     @Override
-    public Optional<EmailVerifyToken> findByTokenAndStatus(String token, Status status) {
+    public Optional<EmailVerifyToken> findByTokenAndStatus(String token) {
         String sql = """
                 SELECT id, token, email, expires_at, consume_at
                 FROM email_verify_token
-                WHERE token = :token AND status = :status
+                WHERE token = :token
                 """;
 
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("token", token)
-                .addValue("status", status.name());
+                .addValue("token", token);
 
         List<EmailVerifyToken> emailVerifyTokens = jdbcTemplate.query(sql, params, EMAIL_VERIFY_TOKEN_ROW_MAPPER);
         return Optional.ofNullable(DataAccessUtils.singleResult(emailVerifyTokens));
     }
 
     @Override
-    public void updateConsumeAt(Long id, Status status) {
+    public void updateConsumeAt(Long id) {
         String sql = """
                 UPDATE email_verify_token
                 SET consume_at = NOW()
-                WHERE id = :id AND status = :status
+                WHERE id = :id
                 """;
 
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("id", id)
-                .addValue("status", status.name());
+                .addValue("id", id);
 
         jdbcTemplate.update(sql, params);
     }

@@ -1,6 +1,6 @@
 package com.ticket.concert.infrastructure.mail;
 
-import com.ticket.concert.domain.email.EmailSender;
+import com.ticket.concert.domain.email.repository.EmailSender;
 import com.ticket.concert.global.exception.BusinessException;
 import jakarta.mail.Address;
 import jakarta.mail.SendFailedException;
