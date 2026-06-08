@@ -65,7 +65,7 @@ public class ProductIntegrationTest extends IntegrationTest {
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
         assertThat(saveProduct).usingRecursiveComparison()
-                .comparingOnlyFields("title", "runningTime", "startDate", "endDate","bookingOpenAt", "bookingCloseAt")
+                .comparingOnlyFields("title", "runningTime", "startDate", "endDate", "bookingOpenAt", "bookingCloseAt")
                 .isEqualTo(createProductRequest);
     }
 
@@ -85,6 +85,45 @@ public class ProductIntegrationTest extends IntegrationTest {
         assertThat(productRepository.count()).isZero();
     }
 
+    @Test
+    @DisplayName("공연 시작일이 종료일보다 늦으면 400을 반환한다.")
+    void create_startAfterEnd_returnsBadRequest() {
+        CreateProductRequest request = generateRequest(
+                LocalDate.now().plusMonths(2), LocalDate.now().plusMonths(1),
+                LocalDateTime.now().plusDays(1), LocalDateTime.now().plusDays(3));
+
+        ExtractableResponse<Response> response =
+                RestAssured.given().log().ifValidationFails()
+                        .sessionId(sessionId)
+                        .contentType(ContentType.JSON)
+                        .body(request)
+                        .when().post(PRODUCT_CREATE_URL)
+                        .then().log().ifValidationFails()
+                        .extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
+        assertThat(productRepository.count()).isZero();
+    }
+
+    @Test
+    @DisplayName("공연·예매 일정이 과거이면 400을 반환한다.")
+    void create_pastSchedule_returnsBadRequest() {
+        CreateProductRequest request = generateRequest(
+                LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2),
+                LocalDateTime.of(2019, 12, 1, 10, 0), LocalDateTime.of(2019, 12, 31, 10, 0));
+
+        ExtractableResponse<Response> response =
+                RestAssured.given().log().ifValidationFails()
+                        .sessionId(sessionId)
+                        .contentType(ContentType.JSON)
+                        .body(request)
+                        .when().post(PRODUCT_CREATE_URL)
+                        .then().log().ifValidationFails()
+                        .extract();
+
+        assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
+        assertThat(productRepository.count()).isZero();
+    }
 
     private CreateProductRequest generateRequest() {
         return new CreateProductRequest(
@@ -93,5 +132,12 @@ public class ProductIntegrationTest extends IntegrationTest {
                 LocalDate.of(2026, 07, 12),
                 LocalDateTime.of(2026, 06, 10, 18, 00, 00),
                 LocalDateTime.of(2026, 06, 12, 18, 00, 00));
+    }
+
+    private CreateProductRequest generateRequest(
+            LocalDate startDate, LocalDate endDate,
+            LocalDateTime bookingOpenAt, LocalDateTime bookingCloseAt) {
+        return new CreateProductRequest(
+                1L, "검정치마 콘서트", 120, startDate, endDate, bookingOpenAt, bookingCloseAt);
     }
 }

@@ -5,9 +5,14 @@ import com.ticket.concert.application.dto.product.request.CreateProductRequest;
 import com.ticket.concert.domain.category.entity.Category;
 import com.ticket.concert.domain.product.entity.Product;
 import com.ticket.concert.domain.product.repository.ProductRepository;
+import com.ticket.concert.global.exception.BusinessException;
+import com.ticket.concert.global.exception.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -18,7 +23,7 @@ public class ProductService {
     private final CategoryService categoryService;
 
     public Product createProduct(CreateProductRequest request) {
-        validate();
+        validateSchedule(request);
 
         Category category = categoryService.getCategory(request.categoryId());
         Product product = request.toProduct(category);
@@ -28,7 +33,28 @@ public class ProductService {
         return saveProduct;
     }
 
-    private void validate() {
-        // 시작일, 종료일, 예매 시작일, 예매 종료일이 현제 날짜보다 앞에 존재할 경우
+    private void validateSchedule(CreateProductRequest request) {
+        validateShowPeriod(request);
+        validateBookingPeriod(request);
+        validateNotPast(request);
+    }
+
+    private void validateShowPeriod(CreateProductRequest request) {
+        if (request.startDate().isAfter(request.endDate())) {
+            throw new BusinessException(ErrorCode.INVALID_SHOW_PERIOD);
+        }
+    }
+
+    private void validateBookingPeriod(CreateProductRequest request) {
+        if (request.bookingOpenAt().isAfter(request.bookingCloseAt())) {
+            throw new BusinessException(ErrorCode.INVALID_BOOKING_PERIOD);
+        }
+    }
+
+    private void validateNotPast(CreateProductRequest request) {
+        if (request.startDate().isBefore(LocalDate.now())
+                || request.bookingOpenAt().isBefore(LocalDateTime.now())) {
+            throw new BusinessException(ErrorCode.PAST_SCHEDULE);
+        }
     }
 }
