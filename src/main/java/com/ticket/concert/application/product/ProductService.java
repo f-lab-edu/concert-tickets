@@ -6,10 +6,13 @@ import com.ticket.concert.application.dto.product.response.UpcomingProductRespon
 import com.ticket.concert.domain.category.entity.Category;
 import com.ticket.concert.domain.product.entity.Product;
 import com.ticket.concert.domain.product.repository.ProductRepository;
+import com.ticket.concert.global.config.RedisCacheConfig;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
 
+    @CacheEvict(cacheNames = RedisCacheConfig.UPCOMING_PRODUCTS, allEntries = true)
     public Product createProduct(CreateProductRequest request) {
         validateSchedule(request);
 
@@ -60,7 +64,7 @@ public class ProductService {
             throw new BusinessException(ErrorCode.PAST_SCHEDULE);
         }
     }
-
+    @Cacheable(cacheNames = RedisCacheConfig.UPCOMING_PRODUCTS)
     public List<UpcomingProductResponse> getUpcomingProducts() {
         return productRepository.findUpcomingProducts(
                         LocalDateTime.now(),
