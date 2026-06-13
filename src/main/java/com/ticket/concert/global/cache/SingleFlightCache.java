@@ -6,6 +6,7 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,17 @@ public class SingleFlightCache {
 
     @SuppressWarnings("unchecked")
     private <T> T read(Cache cache, Object key) {
-        Cache.ValueWrapper w = cache.get(key);
-        return w == null ? null : (T) w.get();
+        try {
+            Cache.ValueWrapper w = cache.get(key);
+            return w == null ? null : (T) w.get();
+        } catch (SerializationException e) {
+            log.warn("[CACHE DESERIALIZE] 미스 처리. key={}, err={}", key, e.getMessage());
+            try {
+                cache.evict(key);
+            } catch (RuntimeException ignore) {
+
+            }
+            return null;
+        }
     }
 }
