@@ -20,7 +20,6 @@ public class SingleFlightCache {
     private final RedissonClient redissonClient;
 
     private static final long WAIT_TIME = 3L;
-    private static final long LEASE_TIME = 2L;
 
     public <T> T get(String cacheName, Object key, Supplier<T> loader) {
         Cache cache = cacheManager.getCache(cacheName);
@@ -36,7 +35,7 @@ public class SingleFlightCache {
         RLock lock = redissonClient.getLock("LOCK:" + cacheName + ":" + key);
         boolean acquired = false;
         try {
-            acquired = lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS);
+            acquired = lock.tryLock(WAIT_TIME, TimeUnit.SECONDS);
             if (!acquired) {
                 T afterWait = read(cache, key);
                 return afterWait != null ? afterWait : loader.get();

@@ -22,6 +22,7 @@ import java.time.Duration;
 public class RedisCacheConfig {
 
     public static final String UPCOMING_PRODUCTS = "upcomingProducts";
+    public static final String UPCOMING_KEY = "upcoming";
     public static final Duration TTL = Duration.ofMinutes(10);
 
     @Bean

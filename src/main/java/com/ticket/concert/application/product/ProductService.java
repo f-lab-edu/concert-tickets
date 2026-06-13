@@ -28,7 +28,6 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final SingleFlightCache singleFlightCache;
-    private static final String UPCOMING_KEY = "upcoming";
 
     @CacheEvict(cacheNames = RedisCacheConfig.UPCOMING_PRODUCTS, allEntries = true)
     public Product createProduct(CreateProductRequest request) {
@@ -70,7 +69,7 @@ public class ProductService {
     public List<UpcomingProductResponse> getUpcomingProducts() {
         return singleFlightCache.get(
                 RedisCacheConfig.UPCOMING_PRODUCTS,
-                UPCOMING_KEY,
+                RedisCacheConfig.UPCOMING_KEY,
                 this::loadUpcomingProducts
         );
     }
