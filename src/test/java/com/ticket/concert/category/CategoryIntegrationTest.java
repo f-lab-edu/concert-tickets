@@ -2,7 +2,6 @@ package com.ticket.concert.category;
 
 import com.ticket.concert.IntegrationTest;
 import com.ticket.concert.application.dto.category.request.CreateCategoryRequest;
-import com.ticket.concert.application.dto.user.request.JoinRequest;
 import com.ticket.concert.domain.category.entity.Category;
 import com.ticket.concert.domain.category.repository.CategoryRepository;
 import io.restassured.RestAssured;
@@ -20,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("카테고리 통합테스트")
 public class CategoryIntegrationTest extends IntegrationTest {
 
-    private static final String CATEGORY_URL = "/v1/category";
+    private static final String CREATE_URL = "/v1/category";
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -42,7 +41,7 @@ public class CategoryIntegrationTest extends IntegrationTest {
                         .contentType(ContentType.JSON)
                         .body(createCategoryRequest)
                         .when()
-                        .post(CATEGORY_URL)
+                        .post(CREATE_URL)
                         .then().log().ifValidationFails()
                         .extract();
 
@@ -64,7 +63,7 @@ public class CategoryIntegrationTest extends IntegrationTest {
                         .contentType(ContentType.JSON)
                         .body(blankRequest)
                         .when()
-                        .post(CATEGORY_URL)
+                        .post(CREATE_URL)
                         .then().log().ifValidationFails()
                         .extract();
 
