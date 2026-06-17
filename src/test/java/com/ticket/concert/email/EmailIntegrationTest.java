@@ -2,8 +2,8 @@ package com.ticket.concert.email;
 
 import com.ticket.concert.IntegrationTest;
 import com.ticket.concert.application.dto.mail.request.MailSendRequest;
-import com.ticket.concert.domain.email.EmailSender;
-import com.ticket.concert.domain.email.EmailVerifyTokenRepository;
+import com.ticket.concert.domain.email.repository.EmailSender;
+import com.ticket.concert.domain.email.repository.EmailVerifyTokenRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;

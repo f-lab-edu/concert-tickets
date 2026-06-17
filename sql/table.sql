@@ -1,3 +1,12 @@
+DROP TABLE IF EXISTS `booking`;
+DROP TABLE IF EXISTS `seat_inventory`;
+DROP TABLE IF EXISTS `seat`;
+DROP TABLE IF EXISTS `performance`;
+DROP TABLE IF EXISTS `product`;
+DROP TABLE IF EXISTS `category`;
+DROP TABLE IF EXISTS `email_verify_token`;
+DROP TABLE IF EXISTS `users`;
+
 CREATE TABLE `users`
 (
     `id`         BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '고유번호',

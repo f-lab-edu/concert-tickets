@@ -2,8 +2,8 @@ package com.ticket.concert.user;
 
 import com.ticket.concert.IntegrationTest;
 import com.ticket.concert.application.dto.user.request.JoinRequest;
-import com.ticket.concert.domain.user.User;
-import com.ticket.concert.domain.user.UserRepository;
+import com.ticket.concert.domain.user.entity.User;
+import com.ticket.concert.domain.user.repository.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
