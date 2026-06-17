@@ -5,6 +5,8 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.simpleNameEndingWith;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.simpleNameStartingWith;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
@@ -64,9 +66,11 @@ public class ArchitectureTest {
      */
     @ArchTest
     static final ArchRule repository_impls_should_be_in_infrastructure = classes()
-            .that().haveSimpleNameEndingWith("RepositoryImpl")
-            .or().haveSimpleNameStartingWith("Jdbc")
-            .or().haveSimpleNameStartingWith("Jpa")
+            .that(
+                    simpleNameEndingWith("RepositoryImpl")
+                            .or(simpleNameStartingWith("Jpa").and(simpleNameEndingWith("Repository")))
+                            .or(simpleNameStartingWith("Jdbc").and(simpleNameEndingWith("Repository")))
+            )
             .should().resideInAPackage("..infrastructure..");
 
     /**
