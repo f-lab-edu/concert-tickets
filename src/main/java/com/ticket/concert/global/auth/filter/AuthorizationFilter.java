@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -19,12 +20,17 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             "/v1/email/send",
             "/v1/email/verify",
             "/v1/products/upcoming",
+            "/v1/products/*",
             "/error"
     );
 
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return EXCLUDE_PATHS.contains(request.getRequestURI());
+        String uri = request.getRequestURI();
+        return EXCLUDE_PATHS.stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, uri));
     }
 
     @Override
