@@ -1,6 +1,7 @@
 package com.ticket.concert.application.seat;
 
 import com.ticket.concert.application.dto.seat.response.SeatResponse;
+import com.ticket.concert.domain.seat.entity.Seat;
 import com.ticket.concert.domain.seat.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,9 @@ public class SeatService {
     private final SeatRepository seatRepository;
 
     public List<SeatResponse> getSeats(Long productId) {
-        return null;
+        List<Seat> seats = seatRepository.findByProductIdAndDeleted(productId, false);
+        return seats.stream()
+                .map(SeatResponse::from)
+                .toList();
     }
 }
