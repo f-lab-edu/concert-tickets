@@ -44,7 +44,10 @@ public enum ErrorCode {
     INVALID_BOOKING_PERIOD(HttpStatus.BAD_REQUEST, "P002", "예매 마감 일시는 시작 일시보다 빠를 수 없습니다."),
     PAST_SCHEDULE(HttpStatus.BAD_REQUEST, "P003", "공연·예매 일정은 현재 시각 이후여야 합니다."),
     BOOKING_AFTER_SHOW_START(HttpStatus.BAD_REQUEST, "P004", "예매는 공연 시작 전에 마감되어야 합니다."),
-    NOTFOUND_PRODUCT(HttpStatus.BAD_REQUEST, "P005", "찾을 수 없는 상품입니다.");
+    NOTFOUND_PRODUCT(HttpStatus.BAD_REQUEST, "P005", "찾을 수 없는 상품입니다."),
+
+    // Seat Inventory
+    NOTFOUND_SEAT_INVENTORY(HttpStatus.BAD_REQUEST, "SI001", "찾을 수 없는 좌석 슬롯입니다.");
 
 
 
