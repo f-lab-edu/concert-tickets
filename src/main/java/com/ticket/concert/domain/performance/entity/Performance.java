@@ -33,7 +33,7 @@ public class Performance {
     private LocalDateTime showAt;
 
     @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private PerformanceStatus status;
 
     private Boolean deleted;
 }
