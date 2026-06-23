@@ -11,8 +11,7 @@ import java.util.List;
 public interface SeatInventoryRepository extends JpaRepository<SeatInventory, Long> {
     @Query("""
             SELECT new com.ticket.concert.application.dto.seatInventory.response.SeatInventoryResponse(
-                   si.id, s.id, si.performance.id, si.status, si.heldUntil,
-                   s.zone, s.row, s.seatNo, s.grade, s.price)
+                   si.id, s.id, si.performance.id, si.status, si.heldUntil)
             FROM SeatInventory si
                 JOIN si.seat s
             WHERE si.performance.id = :performanceId

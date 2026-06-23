@@ -42,7 +42,7 @@ public class SeatInventory extends BaseTimeEntity {
     private Performance performance;
 
     @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private SeatInventoryStatus status;
 
     private LocalDateTime heldUntil;
 
