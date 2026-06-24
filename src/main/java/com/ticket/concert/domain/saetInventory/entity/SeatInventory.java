@@ -4,6 +4,8 @@ import com.ticket.concert.domain.BaseTimeEntity;
 import com.ticket.concert.domain.performance.entity.Performance;
 import com.ticket.concert.domain.seat.entity.Seat;
 import com.ticket.concert.domain.user.entity.User;
+import com.ticket.concert.global.exception.BusinessException;
+import com.ticket.concert.global.exception.constant.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -47,4 +49,23 @@ public class SeatInventory extends BaseTimeEntity {
     private LocalDateTime heldUntil;
 
     private Boolean deleted;
+
+
+    public void hold(User user, LocalDateTime now, long holdMinutes) {
+        if (!isHoldable(now)) {
+            throw new BusinessException(ErrorCode.HOLD_INVENTORY);
+        }
+        this.user = user;
+        this.status = SeatInventoryStatus.HELD;
+        this.heldUntil = now.plusMinutes(holdMinutes);
+    }
+
+    private boolean isHoldable(LocalDateTime now) {
+        if (status == SeatInventoryStatus.AVAILABLE) {
+            return true;
+        }
+        return status == SeatInventoryStatus.HELD
+                && heldUntil != null
+                && heldUntil.isBefore(now);
+    }
 }
