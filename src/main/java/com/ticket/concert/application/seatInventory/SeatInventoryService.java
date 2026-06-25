@@ -12,6 +12,7 @@ import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,10 @@ public class SeatInventoryService {
 
     private final SeatInventoryRepository seatInventoryRepository;
     private final UserRepository userRepository;
+    private final SeatHoldOptimisticExecutor optimisticExecutor;
 
     private static final long HOLD_MINUTES = 7;
+    private static final int MAX_RETRY = 3;
 
 
     public List<SeatInventoryResponse> getSeatInventory(SeatInventoryRequest request) {
@@ -35,8 +38,8 @@ public class SeatInventoryService {
 
     @Transactional
     public void hold(HoldSeatRequest request, LoginUser loginUser) {
-        SeatInventory inventory = updateHoldInventory(request);
         User user = findByUserOrThrow(loginUser);
+        SeatInventory inventory = updateHoldInventory(request);
         inventory.hold(user, LocalDateTime.now(), HOLD_MINUTES);
     }
 
@@ -49,5 +52,19 @@ public class SeatInventoryService {
     private User findByUserOrThrow(LoginUser loginUser) {
         return userRepository.findById(loginUser.id())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOTFOUND_USER));
+    }
+
+    public void holdWithOptimisticLock(HoldSeatRequest request, LoginUser loginUser) {
+        for (int attempt = 1; attempt <= MAX_RETRY; attempt++) {
+            try {
+                optimisticExecutor.hold(request, loginUser);
+                return;
+            } catch (ObjectOptimisticLockingFailureException e) {
+                log.warn("좌석 선점 버전 충돌, 재시도 {}/{}", attempt, MAX_RETRY);
+                if (attempt == MAX_RETRY) {
+                    throw new BusinessException(ErrorCode.HOLD_INVENTORY);
+                }
+            }
+        }
     }
 }

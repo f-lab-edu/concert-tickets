@@ -37,4 +37,13 @@ public interface SeatInventoryRepository extends JpaRepository<SeatInventory, Lo
             """)
     Optional<SeatInventory> findForUpdate(@Param("performanceId") Long performanceId,
                                           @Param("seatId") Long seatId);
+
+    @Query("""
+        SELECT si FROM SeatInventory si
+        WHERE si.performance.id = :performanceId
+          AND si.seat.id = :seatId
+          AND si.deleted = false
+        """)
+    Optional<SeatInventory> findBySeat(@Param("performanceId") Long performanceId,
+                                       @Param("seatId") Long seatId);
 }

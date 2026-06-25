@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -47,6 +48,9 @@ public class SeatInventory extends BaseTimeEntity {
     private SeatInventoryStatus status;
 
     private LocalDateTime heldUntil;
+
+    @Version
+    private Long version;
 
     private Boolean deleted;
 

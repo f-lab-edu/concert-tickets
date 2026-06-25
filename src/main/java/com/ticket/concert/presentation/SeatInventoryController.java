@@ -33,9 +33,15 @@ public class SeatInventoryController {
     }
 
     @PostMapping(value = "/v1/seat-inventory")
-    public ApiResponse<Void> holdSeatInventory(@Valid @RequestBody HoldSeatRequest request,
-                                                 @CurrentUser LoginUser user) {
+    public ApiResponse<Void> holdSeatInventory(@Valid @RequestBody HoldSeatRequest request, @CurrentUser LoginUser user) {
         seatInventoryService.hold(request, user);
+        return ApiResponse.success();
+    }
+
+    @PostMapping(value = "/v1/seat-inventory/optimistic")
+    public ApiResponse<Void> holdSeatInventoryOptimistic(@Valid @RequestBody HoldSeatRequest request,
+                                                         @CurrentUser LoginUser user) {
+        seatInventoryService.holdWithOptimisticLock(request, user);
         return ApiResponse.success();
     }
 }
