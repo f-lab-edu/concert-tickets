@@ -39,6 +39,7 @@ public class User extends BaseTimeEntity {
         this.name = name;
         this.phone = phone;
         this.role = Role.valueOf(role);
+        this.deleted = false;
     }
 
 }

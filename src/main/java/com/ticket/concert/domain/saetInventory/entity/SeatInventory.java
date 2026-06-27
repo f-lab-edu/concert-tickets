@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -71,5 +72,13 @@ public class SeatInventory extends BaseTimeEntity {
         return status == SeatInventoryStatus.HELD
                 && heldUntil != null
                 && heldUntil.isBefore(now);
+    }
+
+    @Builder
+    public SeatInventory(Seat seat, Performance performance) {
+        this.seat = seat;
+        this.performance = performance;
+        this.status = SeatInventoryStatus.AVAILABLE;
+        this.deleted = false;
     }
 }

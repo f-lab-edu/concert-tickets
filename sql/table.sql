@@ -70,7 +70,7 @@ CREATE TABLE `seat`
     `id`         BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '고유번호',
     `product_id` BIGINT                            NOT NULL COMMENT '상품 고유번호',
     `zone`       VARCHAR(50)                       NOT NULL COMMENT '구역 (1층 A구역)',
-    `row`        VARCHAR(50)                       NOT NULL COMMENT '열',
+    `seat_row`   VARCHAR(50)                       NOT NULL COMMENT '열',
     `seat_no`    VARCHAR(50)                       NOT NULL COMMENT '번호',
     `grade`      VARCHAR(100)                      NOT NULL COMMENT '등급명',
     `price`      INT                               NOT NULL COMMENT '가격',
