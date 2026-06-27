@@ -4,6 +4,7 @@ import com.ticket.concert.application.dto.seatInventory.request.CreateSeatInvent
 import com.ticket.concert.application.dto.seatInventory.request.HoldSeatRequest;
 import com.ticket.concert.application.dto.seatInventory.request.SeatInventoryRequest;
 import com.ticket.concert.application.dto.seatInventory.response.SeatInventoryResponse;
+import com.ticket.concert.application.seatInventory.SeatInventoryRedisService;
 import com.ticket.concert.application.seatInventory.SeatInventoryService;
 import com.ticket.concert.domain.LoginUser;
 import com.ticket.concert.global.auth.resolver.CurrentUser;
@@ -25,6 +26,7 @@ import java.util.List;
 public class SeatInventoryController {
 
     private final SeatInventoryService seatInventoryService;
+    private final SeatInventoryRedisService seatInventoryRedisService;
 
     @GetMapping(value = "/v1/seat-inventory")
     public ApiResponse<List<SeatInventoryResponse>> getSeatInventory(@Valid @ModelAttribute SeatInventoryRequest request) {
@@ -42,6 +44,12 @@ public class SeatInventoryController {
     public ApiResponse<Void> holdSeatInventoryOptimistic(@Valid @RequestBody HoldSeatRequest request,
                                                          @CurrentUser LoginUser user) {
         seatInventoryService.holdWithOptimisticLock(request, user);
+        return ApiResponse.success();
+    }
+
+    @PostMapping(value = "/v1/seat-inventory-redis")
+    public ApiResponse<Void> holdRedisSeatInventory(@Valid @RequestBody HoldSeatRequest request, @CurrentUser LoginUser user) {
+        seatInventoryRedisService.holdRedis(request, user);
         return ApiResponse.success();
     }
 }
