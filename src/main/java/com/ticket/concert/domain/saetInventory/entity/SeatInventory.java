@@ -51,9 +51,9 @@ public class SeatInventory extends BaseTimeEntity {
     private LocalDateTime heldUntil;
 
     /**
-     * `@Version`은 JPA에서 낙관적 락을 구현하기 위한 어노테이션입니다.
-     * `@Version`이 붙은 필드는 엔티티가 수정될 때마다 자동으로 1씩 증가합니다.
-     * JPA가 UPDATE 쿼리를 날릴 때 버전 값을 WHERE 조건에 포함시키는 것이 핵심입니다.
+     * `@Version`은 JPA에서 낙관적 락을 구현하기 위한 어노테이션입니다. <br/>
+     * `@Version`이 붙은 필드는 엔티티가 수정될 때마다 자동으로 1씩 증가합니다. <br/>
+     * JPA가 UPDATE 쿼리를 날릴 때 버전 값을 WHERE 조건에 포함시키는 것이 핵심입니다. <br/>
      * 동시에 여러 요청이 같은 좌석을 점유하려 할 때, UPDATE 시 version 불일치로
      * OptimisticLockException을 발생시켜 중복 점유를 방지합니다.
      */
