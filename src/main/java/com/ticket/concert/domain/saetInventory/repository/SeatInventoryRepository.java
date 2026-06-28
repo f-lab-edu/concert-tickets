@@ -25,6 +25,11 @@ public interface SeatInventoryRepository extends JpaRepository<SeatInventory, Lo
             """)
     List<SeatInventoryResponse> findBySeatIdAndPerformanceIdAndDeleted(Long performanceId);
 
+    /**
+     * 비관적 락을 거는 조회 메서드입니다. 핵심 목적은 같은 좌석에 동시 요청이 와도 한 번에 한 트랜잭션만 그 행을 다루게 만드는 것입니다.<br/>
+     * 먼저 현재 상태를 조회하고 락을 획득할 수 있는지 판단한 후 수정해야 하는데, '읽가 > 판단 > 수정' 사이에 다른 요청이 끼어들면
+     * 둘 다 같은 좌석을 잡아버리는 사고가 발생합니다. 그래서 조회하는 순간부터 그 행을 잠궈 다른 요청은 잠금이 풀릴 때까지 대기하게 만듭니다.
+     */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({
             @QueryHint(name = "jakarta.persistence.lock.timeout", value = "2000")
