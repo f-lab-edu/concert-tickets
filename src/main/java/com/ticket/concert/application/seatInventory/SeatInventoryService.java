@@ -55,9 +55,11 @@ public class SeatInventoryService {
     }
 
     public void holdWithOptimisticLock(HoldSeatRequest request, LoginUser loginUser) {
+        User user = findUserOrThrows(loginUser);
+
         for (int attempt = 1; attempt <= MAX_RETRY; attempt++) {
             try {
-                optimisticExecutor.hold(request, loginUser);
+                optimisticExecutor.hold(request, user);
                 return;
             } catch (ObjectOptimisticLockingFailureException e) {
                 log.warn("좌석 선점 버전 충돌, 재시도 {}/{}", attempt, MAX_RETRY);
@@ -66,5 +68,10 @@ public class SeatInventoryService {
                 }
             }
         }
+    }
+
+    private User findUserOrThrows(LoginUser loginUser) {
+        return userRepository.findById(loginUser.id())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOTFOUND_USER));
     }
 }
