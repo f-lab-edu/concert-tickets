@@ -1,6 +1,5 @@
 package com.ticket.concert.presentation;
 
-import com.ticket.concert.application.dto.seatInventory.request.CreateSeatInventoryRequest;
 import com.ticket.concert.application.dto.seatInventory.request.HoldSeatRequest;
 import com.ticket.concert.application.dto.seatInventory.request.SeatInventoryRequest;
 import com.ticket.concert.application.dto.seatInventory.response.SeatInventoryResponse;

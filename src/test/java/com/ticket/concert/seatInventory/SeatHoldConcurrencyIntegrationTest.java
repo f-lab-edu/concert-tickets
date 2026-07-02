@@ -19,6 +19,7 @@ import com.ticket.concert.domain.seat.repository.SeatRepository;
 import com.ticket.concert.domain.user.constant.Role;
 import com.ticket.concert.domain.user.entity.User;
 import com.ticket.concert.domain.user.repository.UserRepository;
+import com.ticket.concert.global.exception.BusinessException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,7 +68,7 @@ public class SeatHoldConcurrencyIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    @DisplayName("동시에 같은 좌석을 선점하면 한 명만 성공한다.")
+    @DisplayName("동시에 같은 좌석을 비관적락으로 선점하면 한 명만 성공한다.")
     void hold_concurrently_onlyOneSucceeds() throws InterruptedException {
         int threadCount = 100;
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
@@ -109,6 +110,58 @@ public class SeatHoldConcurrencyIntegrationTest extends IntegrationTest {
 
         SeatInventory result = transactionTemplate.execute(status ->
                 seatInventoryRepository.findForUpdate(performanceId, seatId).orElseThrow());
+        assertThat(result.getStatus()).isEqualTo(SeatInventoryStatus.HELD);
+    }
+
+    @Test
+    @DisplayName("동시에 같은 좌석을 낙관적 락으로 선점하면 한 명만 성공한다.")
+    void holdWithOptimisticLock_concurrently_onlyOneSucceeds() throws InterruptedException {
+        int threadCount = 100;
+        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch ready = new CountDownLatch(threadCount);
+        CountDownLatch start = new CountDownLatch(1);
+        CountDownLatch done = new CountDownLatch(threadCount);
+
+        AtomicInteger success = new AtomicInteger();
+        AtomicInteger businessFail = new AtomicInteger();
+        AtomicInteger unexpectedFail = new AtomicInteger();
+
+        for (int i = 0; i < threadCount; i++) {
+            Long userId = userIds.get(i);
+            int finalI = i;
+            executor.submit(() -> {
+                ready.countDown();
+                try {
+                    start.await();
+                    seatInventoryService.holdWithOptimisticLock(
+                            new HoldSeatRequest(performanceId, seatId),
+                            new LoginUser(userId, "찬한", List.of(Role.USER))
+                    );
+                    success.incrementAndGet();
+                    System.out.println("success : " + finalI);
+                } catch (BusinessException e) {
+                    businessFail.incrementAndGet();
+                } catch (Exception e) {
+                    // 낙관적 락 예외가 서비스 밖으로 새어나오면 여기로 잡힘 -> 0이어야 정상
+                    unexpectedFail.incrementAndGet();
+                    System.out.println("unexpected : " + e.getClass().getSimpleName());
+                } finally {
+                    done.countDown();
+                }
+            });
+        }
+
+        ready.await();
+        start.countDown();
+        done.await();
+        executor.shutdown();
+
+        assertThat(success.get()).isEqualTo(1);
+        assertThat(businessFail.get()).isEqualTo(threadCount - 1);
+        assertThat(unexpectedFail.get()).isZero();
+
+        SeatInventory result = transactionTemplate.execute(status ->
+                seatInventoryRepository.findBySeat(performanceId, seatId).orElseThrow());
         assertThat(result.getStatus()).isEqualTo(SeatInventoryStatus.HELD);
     }
 

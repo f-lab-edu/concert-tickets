@@ -4,7 +4,6 @@ import com.ticket.concert.application.dto.seatInventory.request.HoldSeatRequest;
 import com.ticket.concert.domain.saetInventory.entity.SeatInventory;
 import com.ticket.concert.domain.saetInventory.repository.SeatInventoryRepository;
 import com.ticket.concert.domain.user.entity.User;
-import com.ticket.concert.domain.user.repository.UserRepository;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
