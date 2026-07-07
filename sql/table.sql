@@ -70,7 +70,7 @@ CREATE TABLE `seat`
     `id`         BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '고유번호',
     `product_id` BIGINT                            NOT NULL COMMENT '상품 고유번호',
     `zone`       VARCHAR(50)                       NOT NULL COMMENT '구역 (1층 A구역)',
-    `row`        VARCHAR(50)                       NOT NULL COMMENT '열',
+    `seat_row`   VARCHAR(50)                       NOT NULL COMMENT '열',
     `seat_no`    VARCHAR(50)                       NOT NULL COMMENT '번호',
     `grade`      VARCHAR(100)                      NOT NULL COMMENT '등급명',
     `price`      INT                               NOT NULL COMMENT '가격',
@@ -88,6 +88,7 @@ CREATE TABLE `seat_inventory`
     `performance_id`   BIGINT                            NOT NULL COMMENT '회차 고유번호',
     `status`           VARCHAR(50)                       NOT NULL COMMENT '좌석 상태(AVAILABLE/HELD/SOLD/BLOCKED)',
     `held_until`       DATETIME                          NULL COMMENT '선점(결제 중) 만료 시각)',
+    `version`          BIGINT                            NOT NULL DEFAULT 0 COMMENT '버전',
     `created_at`       DATETIME                          NOT NULL DEFAULT NOW() COMMENT '생성일',
     `updated_at`       DATETIME                          NULL COMMENT '수정일',
     `deleted`          TINYINT(1)                        NOT NULL DEFAULT 0 COMMENT '삭제 여부'

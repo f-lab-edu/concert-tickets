@@ -24,6 +24,7 @@ public enum ErrorCode {
     INVALID_CREDENTIALS(HttpStatus.BAD_REQUEST, "M003", "아이디 또는 비밀번호가 올바르지 않습니다."),
     EMAIL_DUPLICATED(HttpStatus.BAD_REQUEST, "M004", "이미 사용중인 이메일입니다."),
     PHONE_DUPLICATED(HttpStatus.BAD_REQUEST, "M005", "이미 사용중인 연락처입니다."),
+    NOTFOUND_USER(HttpStatus.BAD_REQUEST, "M006", "찾을 수 없는 회원입니다."),
 
     // Email
     INVALID_EMAIL(HttpStatus.BAD_REQUEST, "E001", "잘못된 이메일 주소입니다."),
@@ -47,7 +48,8 @@ public enum ErrorCode {
     NOTFOUND_PRODUCT(HttpStatus.BAD_REQUEST, "P005", "찾을 수 없는 상품입니다."),
 
     // Seat Inventory
-    NOTFOUND_SEAT_INVENTORY(HttpStatus.BAD_REQUEST, "SI001", "찾을 수 없는 좌석 슬롯입니다.");
+    NOTFOUND_SEAT_INVENTORY(HttpStatus.BAD_REQUEST, "SI001", "찾을 수 없는 좌석 슬롯입니다."),
+    HOLD_INVENTORY(HttpStatus.BAD_REQUEST, "SI002", "이미 선점된 좌석입니다.");
 
 
 

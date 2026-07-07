@@ -87,4 +87,20 @@ public class JdbcUserRepository implements UserRepository {
         return Objects.requireNonNull(keyHolder.getKey()).longValue();
     }
 
+    @Override
+    public Optional<User> findById(Long id) {
+        String sql = """
+                SELECT id, email, password, name, phone, role
+                FROM users
+                WHERE id = :id AND deleted = :deleted
+                """;
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("id", id)
+                .addValue("deleted", false);
+
+        List<User> users = jdbcTemplate.query(sql, params, USER_ROW_MAPPER);
+        return Optional.ofNullable(DataAccessUtils.singleResult(users));
+    }
+
 }

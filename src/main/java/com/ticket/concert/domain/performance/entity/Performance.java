@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -36,4 +37,13 @@ public class Performance {
     private PerformanceStatus status;
 
     private Boolean deleted;
+
+    @Builder
+    private Performance(Product product, LocalDateTime showAt,
+                        PerformanceStatus status) {
+        this.product = product;
+        this.showAt = showAt;
+        this.status = status;
+        this.deleted = false;
+    }
 }
