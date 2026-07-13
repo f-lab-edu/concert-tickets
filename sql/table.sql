@@ -59,7 +59,7 @@ CREATE TABLE `performance`
     `id`                 BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '고유번호',
     `product_id`         BIGINT                            NOT NULL COMMENT '상품 고유번호',
     `show_at`            DATETIME                          NOT NULL COMMENT '공연 일시',
-    `performance_status` VARCHAR(50)                       NOT NULL COMMENT '예매 상태(예매 가능 / 매진 / 취소)',
+    `status`             VARCHAR(50)                       NOT NULL COMMENT '예매 상태(예매 가능 / 매진 / 취소)',
     `created_at`         DATETIME                          NOT NULL DEFAULT NOW() COMMENT '생성일',
     `updated_at`         DATETIME                          NULL COMMENT '수정일',
     `deleted`            TINYINT(1)                        NOT NULL DEFAULT 0 COMMENT '삭제 여부'
@@ -83,11 +83,11 @@ CREATE TABLE `seat`
 CREATE TABLE `seat_inventory`
 (
     `id`               BIGINT PRIMARY KEY AUTO_INCREMENT NOT NULL COMMENT '고유번호',
-    `user_id`          BIGINT                            NOT NULL COMMENT '회원 고유번호',
+    `user_id`          BIGINT                            NULL COMMENT '회원 고유번호',
     `seat_id`          BIGINT                            NOT NULL COMMENT '좌석 고유번호',
     `performance_id`   BIGINT                            NOT NULL COMMENT '회차 고유번호',
-    `inventory_status` VARCHAR(50)                       NOT NULL COMMENT '좌석 상태(AVAILABLE/HELD/SOLD/BLOCKED)',
-    `held_until`       DATETIME                          NOT NULL COMMENT '선점(결제 중) 만료 시각)',
+    `status`           VARCHAR(50)                       NOT NULL COMMENT '좌석 상태(AVAILABLE/HELD/SOLD/BLOCKED)',
+    `held_until`       DATETIME                          NULL COMMENT '선점(결제 중) 만료 시각)',
     `created_at`       DATETIME                          NOT NULL DEFAULT NOW() COMMENT '생성일',
     `updated_at`       DATETIME                          NULL COMMENT '수정일',
     `deleted`          TINYINT(1)                        NOT NULL DEFAULT 0 COMMENT '삭제 여부'

@@ -55,6 +55,12 @@ dependencies {
     // Jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+    // Redisson
+    implementation 'org.redisson:redisson-spring-boot-starter:3.51.0'
 }
 
 tasks.named('test') {

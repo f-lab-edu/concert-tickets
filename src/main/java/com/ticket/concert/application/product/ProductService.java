@@ -2,17 +2,24 @@ package com.ticket.concert.application.product;
 
 import com.ticket.concert.application.category.CategoryService;
 import com.ticket.concert.application.dto.product.request.CreateProductRequest;
+import com.ticket.concert.application.dto.product.response.ProductResponse;
+import com.ticket.concert.application.dto.product.response.UpcomingProductResponse;
 import com.ticket.concert.domain.category.entity.Category;
 import com.ticket.concert.domain.product.entity.Product;
 import com.ticket.concert.domain.product.repository.ProductRepository;
+import com.ticket.concert.global.cache.SingleFlightCache;
+import com.ticket.concert.global.config.RedisCacheConfig;
 import com.ticket.concert.global.exception.BusinessException;
 import com.ticket.concert.global.exception.constant.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -21,7 +28,9 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
+    private final SingleFlightCache singleFlightCache;
 
+    @CacheEvict(cacheNames = RedisCacheConfig.UPCOMING_PRODUCTS, allEntries = true)
     public Product createProduct(CreateProductRequest request) {
         validateSchedule(request);
 
@@ -56,5 +65,28 @@ public class ProductService {
                 || request.bookingOpenAt().isBefore(LocalDateTime.now())) {
             throw new BusinessException(ErrorCode.PAST_SCHEDULE);
         }
+    }
+
+    public List<UpcomingProductResponse> getUpcomingProducts() {
+        return singleFlightCache.get(
+                RedisCacheConfig.UPCOMING_PRODUCTS,
+                RedisCacheConfig.UPCOMING_KEY,
+                this::loadUpcomingProducts
+        );
+    }
+
+    private List<UpcomingProductResponse> loadUpcomingProducts() {
+        return productRepository.findUpcomingProducts(
+                        LocalDateTime.now(),
+                        PageRequest.of(0, 6)
+                ).stream()
+                .map(UpcomingProductResponse::from)
+                .toList();
+    }
+
+    public ProductResponse getProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOTFOUND_PRODUCT));
+        return ProductResponse.from(product);
     }
 }

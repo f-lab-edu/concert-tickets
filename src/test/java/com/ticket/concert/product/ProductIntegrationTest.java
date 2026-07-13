@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ProductIntegrationTest extends IntegrationTest {
 
     private static final String CATEGORY_CREATE_URL = "/v1/category";
-    private static final String PRODUCT_CREATE_URL = "/v1/product";
+    private static final String PRODUCT_CREATE_URL = "/v1/products";
 
     @Autowired
     private ProductRepository productRepository;
