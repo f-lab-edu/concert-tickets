@@ -2,6 +2,7 @@ package com.ticket.concert.application.product;
 
 import com.ticket.concert.application.category.CategoryService;
 import com.ticket.concert.application.dto.product.request.CreateProductRequest;
+import com.ticket.concert.application.dto.product.response.ProductResponse;
 import com.ticket.concert.application.dto.product.response.UpcomingProductResponse;
 import com.ticket.concert.domain.category.entity.Category;
 import com.ticket.concert.domain.product.entity.Product;
@@ -81,5 +82,11 @@ public class ProductService {
                 ).stream()
                 .map(UpcomingProductResponse::from)
                 .toList();
+    }
+
+    public ProductResponse getProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOTFOUND_PRODUCT));
+        return ProductResponse.from(product);
     }
 }
